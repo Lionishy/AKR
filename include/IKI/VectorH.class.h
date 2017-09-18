@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-namespace AKR {
+namespace IKI {
     template<typename T>
     struct VectorH {
         VectorH(): VectorH(T(0),T(0)) { }

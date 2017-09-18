@@ -3,7 +3,6 @@
 
 #include <array>
 #include <cmath>
-#include <IKI/math/Derivative.h>
 #include <IKI/math/VectorFunction.h>
 
 namespace IKI {
@@ -32,6 +31,28 @@ namespace IKI {
     } 
 
     enum class SolverStatusBroydn {OK=0, NO_PROGRESS=2, MAX_ITERATIONS=4,SINGULAR_JACOBIAN=8};
+
+    //Default version to make a string from calculation error status; only to use with _DEBUG
+    #include <string>
+    inline 
+    std::string StatusToString(SolverStatusBroydn  status) {
+        switch (status) {
+            case SolverStatusBroydn::OK:
+                return std::string("ok");
+
+            case SolverStatusBroydn::NO_PROGRESS:
+                return std::string("no more progress");
+
+            case SolverStatusBroydn::MAX_ITERATIONS:
+                return std::string("maximum number of iterations reached");
+
+            case SolverStatusBroydn::SINGULAR_JACOBIAN:
+                return std::string("singulat Jacobi matrix");
+
+            default:
+                return std::string("Wrong status!");
+        }
+    }
 
     template <typename F, typename X>
     SolverStatusBroydn SolveBroydn(
