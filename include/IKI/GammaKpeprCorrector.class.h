@@ -1,5 +1,5 @@
-#ifndef IKI_go_GammaKperpCorrector_H
-#define IKI_go_GammaKperpCorrector_H
+#ifndef IKI_GammaKperpCorrector_H
+#define IKI_GammaKperpCorrector_H
 
 #include <memory>
 #include <cmath>
@@ -10,9 +10,9 @@
 #include <IKI/math/BroydnSolver.h>
 #include <IKI/math/VectorFunction.h>
 
-namespace IKI { namespace go {
+namespace IKI {
     template <typename T>
-    class GammaKperpCorrector final : public AbstractDispersionRelationCorrector<T> {
+    class GammaKperpCorrector final : public go::AbstractDispersionRelationCorrector<T> {
     public:
         int correct(VectorSp<T> R, VectorSp<T> K, FVector<T> w, VectorSp<T> &R_out, VectorSp<T> &K_out, FVector<T> &w_out) const override {
             VectorSp<T> magnetic_field = field->at(R);
@@ -45,7 +45,7 @@ namespace IKI { namespace go {
         }
 
         GammaKperpCorrector(
-              std::shared_ptr<AbstractDispersionRelation<T> const> dr
+              std::shared_ptr<go::AbstractDispersionRelation<T> const> dr
             , std::shared_ptr<env::AbstractMagneticFieldModel<T> const> field       
             , T tolerance, T dX, T dY, unsigned int max_iter
         ) : dr(dr), field(field), tolerance(tolerance), dX(dX), dY(dY), max_iter(max_iter) {
@@ -66,12 +66,11 @@ namespace IKI { namespace go {
         }
         
     private:
-        std::shared_ptr<AbstractDispersionRelation<T> const> dr;
+        std::shared_ptr<go::AbstractDispersionRelation<T> const> dr;
         std::shared_ptr<env::AbstractMagneticFieldModel<T> const> field;
         T tolerance, dX, dY;
         unsigned int max_iter;
     };
-}//go
 }//IKI
 
-#endif //IKI_go_GammaKperpCorrector_H
+#endif //IKI_GammaKperpCorrector_H
