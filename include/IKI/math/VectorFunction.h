@@ -1,26 +1,15 @@
 #ifndef IKI_VectorFunction_H
 #define IKI_VectorFunction_H
 
+#include <cmath>
 #include <array>
 #include <functional>
-#include <algorithm>
 
 namespace IKI {
     
     /** Vector **/
     template <typename X>
     using FVector = std::array<X,2>;    
-
-    /** template<typename X>
-    using VFunction = std::function<std::array<X,N> (std::array<X,N> const &)>;
-
-    template<typename X, unsigned int N>
-    using SFunction = std::function<X(std::array<X,N> const &)>;
-    
-    template<unsigned int P, unsigned int N, typename X>
-    SFunction MakeSlice(VFunction<X,N> vf) {
-        return [vf] (std::array<X,N> const &x) -> X { return vf(x)[P]; }; 
-    }**/
 
     template <typename X>
     FVector<X> operator+(FVector<X> const &lha, FVector<X> const &rha) {
@@ -54,7 +43,7 @@ namespace IKI {
 
     template <typename X>
     X norm(FVector<X> const &vec) {
-        return vec*vec;
+        return std::sqrt(vec*vec);
     }
 
     template <typename F, typename X>

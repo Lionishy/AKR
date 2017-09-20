@@ -41,6 +41,8 @@ namespace IKI {
             return *this;
         }
 
+        
+
         T r, th, phi;
     };
 
@@ -82,6 +84,20 @@ namespace IKI {
     template <typename T>
     T norm(const VectorSp<T> &vec) {
         return sqrt(vec*vec);
+    }
+    
+    template <typename T>
+    VectorSp<T> rotate(VectorSp<T> const &t, VectorSp<T> const &R, VectorSp<T> const &dR) {
+        return VectorSp<T>(
+              t.r + t.th*dR.th + t.phi*dR.phi*sin(R.th)
+            , t.th - t.r*dR.th + t.phi*dR.phi*cos(R.th)
+            , t.phi - dR.phi*(t.r*sin(R.th) + t.th*cos(R.th))
+        );    
+    }
+
+    template <typename T>
+    VectorSp<T> direction_of(VectorSp<T> const &of) {
+        return of/norm(of);
     }
 } //IKI
 

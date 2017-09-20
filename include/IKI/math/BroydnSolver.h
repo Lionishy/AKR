@@ -30,23 +30,23 @@ namespace IKI {
         return jacob + make_matrix(df-make_vector(jacob,dx),dx)*(static_cast<X>(1)/norm(dx));
     } 
 
-    enum class SolverStatusBroydn {OK=0, NO_PROGRESS=2, MAX_ITERATIONS=4,SINGULAR_JACOBIAN=8};
+    enum SolverStatusBroydn {OK=0, NO_PROGRESS=2, MAX_ITERATIONS=4,SINGULAR_JACOBIAN=8};
 
     //Default version to make a string from calculation error status; only to use with _DEBUG
     #include <string>
     inline 
     std::string StatusToString(SolverStatusBroydn  status) {
         switch (status) {
-            case SolverStatusBroydn::OK:
+            case OK:
                 return std::string("ok");
 
-            case SolverStatusBroydn::NO_PROGRESS:
+            case NO_PROGRESS:
                 return std::string("no more progress");
 
-            case SolverStatusBroydn::MAX_ITERATIONS:
+            case MAX_ITERATIONS:
                 return std::string("maximum number of iterations reached");
 
-            case SolverStatusBroydn::SINGULAR_JACOBIAN:
+            case SINGULAR_JACOBIAN:
                 return std::string("singulat Jacobi matrix");
 
             default:
@@ -55,7 +55,7 @@ namespace IKI {
     }
 
     template <typename F, typename X>
-    SolverStatusBroydn SolveBroydn(
+    int SolveBroydn(
         F f
         , FVector<X> x0
         , X tolerance

@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#include <IKI/VectorSp.class.h>
+
 namespace IKI {
     template<typename T>
     struct VectorH {
@@ -80,6 +82,18 @@ namespace IKI {
     template<typename T>
     T norm(VectorH<T> const &vec) {
         return sqrt(vec*vec);
+    }
+
+    template <typename T>
+    VectorH<T> direction_of(VectorH<T> const &of) {
+        return of/norm(of);
+    }
+    
+    template <typename T>
+    VectorH<T> projection_of_on(VectorSp<T> const &of, VectorSp<T> const &on) {
+        T pl = of*on/norm(on);
+        T pr = std::sqrt(of*of - pl*pl);
+        return VectorH<T>(pl,pr);
     }
 } //IKI
 
