@@ -32,7 +32,13 @@ namespace IKI { namespace go {
             new_K = K + dt*vk;
             new_K = rotate(new_K,new_R,dt*vr);
             
-            return corrector->correct(new_R,new_K,w,R_out,K_out,w_out);            
+            int res = corrector->correct(new_R,new_K,w,R_out,K_out,w_out);            
+            if (res)
+                logger->log(res,new_R,new_K,w,dt,vr,vk);
+            else
+                logger->log(res,R_out,K_out,w_out,dt,vr,vk);
+
+            return res;
         }
 
         PredictorStep(std::shared_ptr<VelocityR<T> const> VR,std::shared_ptr<VelocityK<T> const> VK,std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector): PredictorStep(VR,VK,corrector,std::make_shared<EmptyStepLogger<T>>()) { }
