@@ -10,6 +10,8 @@
 #include <IKI/go/VelocityR.class.h>
 #include <IKI/go/VelocityK.class.h>
 #include <IKI/go/AbstractDispersionRelationCorrector.interface.h>
+#include <IKI/go/AbstractStepLogger.interface.h>
+#include <IKI/go/EmptyStepLogger.class.h>
 
 namespace IKI { namespace go {
     template <typename T>
@@ -33,13 +35,18 @@ namespace IKI { namespace go {
             return corrector->correct(new_R,new_K,w,R_out,K_out,w_out);            
         }
 
-        PredictorStep(std::shared_ptr<VelocityR<T> const> VR,std::shared_ptr<VelocityK<T> const> VK,std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector) : VR(VR), VK(VK), corrector(corrector) {
+        PredictorStep(std::shared_ptr<VelocityR<T> const> VR,std::shared_ptr<VelocityK<T> const> VK,std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector): PredictorStep(VR,VK,corrector,std::make_shared<EmptyStepLogger<T>>()) { }
+
+        PredictorStep(std::shared_ptr<VelocityR<T> const> VR,std::shared_ptr<VelocityK<T> const> VK,std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector, std::shared_ptr<AbstractStepLogger<T> const> logger) : VR(VR), VK(VK), corrector(corrector), logger(logger) {
         }
+        
+
 
     private:
         std::shared_ptr<VelocityR<T> const> VR;
         std::shared_ptr<VelocityK<T> const> VK;
         std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector;
+        std::shared_ptr<AbstractStepLogger<T> const> logger;
     };
 }//go
 }//IKI
