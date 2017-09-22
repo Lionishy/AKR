@@ -6,7 +6,7 @@
 #include <IKI/go/AbstractStep.interface.h>
 
 namespace IKI {
-    template <typename T, typename Iter>
+    template <typename T, typename Col>
     class SubsteppingDecorator final : public go::AbstractStep<T> {
     public:
         int step(VectorSp<T> R, VectorSp<T> K, FVector<T> w, VectorSp<T> &R_out, VectorSp<T> &K_out, FVector<T> &w_out, T &dt) const {
@@ -25,13 +25,14 @@ namespace IKI {
             return res;
         }
 
-        SubsteppingDecorator(std::shared_ptr<go::AbstractStep<T>> inner_step, Iter dt_begin, Iter dt_end) : inner_step(inner_step), dt_begin(dt_begin), dt_end(dt_end), dt_iterator(dt_begin) {
+        SubsteppingDecorator(std::shared_ptr<go::AbstractStep<T> const> inner_step, Col collection) : inner_step(inner_step), dt_begin(std::begin(collection)), dt_end(std::end(collection)), dt_iterator(dt_begin) {
         }
 
     private:
         std::shared_ptr<go::AbstractStep<T> const> inner_step;
-        Iter const dt_begin, dt_end;
-        mutable Iter dt_iterator;    
+        Col collection;
+        typename Col::iterator const dt_begin, dt_end;
+        mutable typename Col::iterator dt_iterator;    
     };
 }//IKI
 
