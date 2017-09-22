@@ -9,7 +9,7 @@
 
 namespace IKI {
     template <typename T>
-    class OmegaCorrector final : go::AbstractDispersionRelationCorrector<T> {
+    class OmegaCorrector final : public go::AbstractDispersionRelationCorrector<T> {
     public:
         int correct(VectorSp<T> R, VectorSp<T> K, FVector<T> w, VectorSp<T> &R_out, VectorSp<T> &K_out, FVector<T> &w_out) const override {
             auto OmegaClosure =
