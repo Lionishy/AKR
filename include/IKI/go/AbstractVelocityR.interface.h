@@ -9,7 +9,7 @@
 namespace IKI { namespace go {
     template <typename T>
     struct AbstractVelocityR {
-        VectorSp<T> at(VectorSp<T> R, VectorSp<T> K, FVector<T> w) const =0;
+        virtual VectorSp<T> at(VectorSp<T> R, VectorSp<T> K, FVector<T> w) const =0;
         virtual ~AbstractVelocityR() noexcept { }
     };    
 }//go

@@ -20,7 +20,7 @@ namespace IKI {
                         << t << " " << dt 
                         << " " << resR.r << " " << resR.th << " " << resR.phi
                         << " " << resK.r << " " << resK.th << " " << resK.phi
-                        << " " << vr.r << " " << vr.th << vr.phi
+                        << " " << vr.r << " " << vr.th << " " << vr.phi
                         << " " << resW[1] << " " << S 
                         << std::endl
                     ;    

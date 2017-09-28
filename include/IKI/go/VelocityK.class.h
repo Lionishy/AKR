@@ -8,12 +8,13 @@
 #include <IKI/VectorH.class.h>
 #include <IKI/math/VectorFunction.h>
 #include <IKI/go/AbstractDispersionRelation.interface.h>
+#include <IKI/go/AbstractVelocityK.interface.h>
 
 namespace IKI { namespace go {
     template <typename T>
-    class VelocityK final {
+    class VelocityK final : public AbstractVelocityK<T> {
     public:
-        VectorSp<T> at(VectorSp<T> R, VectorSp<T> K, FVector<T> w) const {
+        VectorSp<T> at(VectorSp<T> R, VectorSp<T> K, FVector<T> w) const override {
             auto dr_dr = VectorSp<T>(
                   CentralDifferenceDerivative([&R,&K,&w,this] (T r) -> T { return (dr->at(VectorSp<T>(r,R.th,R.phi),K,w))[0]; }, R.r, dR.r)
                 , CentralDifferenceDerivative([&R,&K,&w,this] (T th) -> T { return (dr->at(VectorSp<T>(R.r,th,R.phi),K,w))[0]; }, R.th, dR.th)
