@@ -7,8 +7,8 @@
 #include <IKI/VectorH.class.h>
 #include <IKI/math/VectorFunction.h>
 #include <IKI/go/AbstractStep.interface.h>
-#include <IKI/go/VelocityR.class.h>
-#include <IKI/go/VelocityK.class.h>
+#include <IKI/go/AbstractVelocityR.interface.h>
+#include <IKI/go/AbstractVelocityK.interface.h>
 #include <IKI/go/AbstractDispersionRelationCorrector.interface.h>
 #include <IKI/go/AbstractStepLogger.interface.h>
 #include <IKI/go/EmptyStepLogger.class.h>
@@ -41,16 +41,16 @@ namespace IKI { namespace go {
             return res;
         }
 
-        PredictorStep(std::shared_ptr<VelocityR<T> const> VR,std::shared_ptr<VelocityK<T> const> VK,std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector): PredictorStep(VR,VK,corrector,std::make_shared<EmptyStepLogger<T>>()) { }
+        PredictorStep(std::shared_ptr<AbstractVelocityR<T> const> VR,std::shared_ptr<AbstractVelocityK<T> const> VK,std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector): PredictorStep(VR,VK,corrector,std::make_shared<EmptyStepLogger<T>>()) { }
 
-        PredictorStep(std::shared_ptr<VelocityR<T> const> VR,std::shared_ptr<VelocityK<T> const> VK,std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector, std::shared_ptr<AbstractStepLogger<T> const> logger) : VR(VR), VK(VK), corrector(corrector), logger(logger) {
+        PredictorStep(std::shared_ptr<AbstractVelocityR<T> const> VR,std::shared_ptr<AbstractVelocityK<T> const> VK,std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector, std::shared_ptr<AbstractStepLogger<T> const> logger) : VR(VR), VK(VK), corrector(corrector), logger(logger) {
         }
         
 
 
     private:
-        std::shared_ptr<VelocityR<T> const> VR;
-        std::shared_ptr<VelocityK<T> const> VK;
+        std::shared_ptr<AbstractVelocityR<T> const> VR;
+        std::shared_ptr<AbstractVelocityK<T> const> VK;
         std::shared_ptr<AbstractDispersionRelationCorrector<T> const> corrector;
         std::shared_ptr<AbstractStepLogger<T> const> logger;
     };
