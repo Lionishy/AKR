@@ -13,6 +13,7 @@ namespace IKI {
             int res;
             if (dt_iterator != dt_begin)
                 --dt_iterator;
+            dt = *dt_iterator;
             do {
                 res = inner_step->step(R,K,w,R_out,K_out,w_out,dt);
                 if (res) {
