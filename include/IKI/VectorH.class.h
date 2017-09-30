@@ -92,7 +92,8 @@ namespace IKI {
     template <typename T>
     VectorH<T> projection_of_on(VectorSp<T> const &of, VectorSp<T> const &on) {
         T pl = of*on/norm(on);
-        T pr = std::sqrt(of*of - pl*pl);
+        T pr = of*of - pl*pl;
+        pr = pr > static_cast<T>(0) ? std::sqrt(pr) : static_cast<T>(0);
         return VectorH<T>(pl,pr);
     }
 } //IKI

@@ -79,8 +79,8 @@ namespace IKI {
                 break;        
             }
             
-            X detOver = 1/det(jacob);
-            if (std::isnan(detOver) && std::isinf(detOver)) {
+            X detOver = static_cast<T>(1)/det(jacob);
+            if (std::isnan(detOver) || std::isinf(detOver)) {
                 if (1 == jacob_sing) {
                     res = SolverStatusBroydn::SINGULAR_JACOBIAN;
                     break;
@@ -108,7 +108,7 @@ namespace IKI {
 
 
             auto dx = xNext - xPrev;
-            auto dxOver = 1/(dx*dx);
+            auto dxOver = static_cast<T>(1)/(dx*dx);
             if (std::isnan(dxOver) || std::isinf(dxOver)) {
                 if (1 == no_x_progress) {
                     res = SolverStatusBroydn::NO_PROGRESS;
