@@ -20,7 +20,7 @@ namespace IKI {
             return res;
         }
 
-        SubsteppingDecorator(std::shared_ptr<go::AbstractStep<T> const> inner_step, Col collection) : inner_step(inner_step), dt_begin(std::begin(collection)), dt_end(std::end(collection)), dt_iterator(dt_begin) {
+        SubsteppingDecorator(std::shared_ptr<go::AbstractStep<T> const> inner_step, Col collection) : inner_step(inner_step), dt_begin(std::begin(collection)), dt_end(std::end(collection)) {
         }
 
     private:
