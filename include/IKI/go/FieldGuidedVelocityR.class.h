@@ -21,7 +21,6 @@ namespace IKI { namespace go {
 
             T dD_dw = CentralDifferenceDerivative([&R,&K,&w,this] (T x) -> T { return dr->at(R,K,FVector<T>({x,w[1]}))[0]; },w[0],dw);
 
-            
             return VectorH<T>(dD_dKpl/dD_dw,dD_dKpr/dD_dw);
         }
 
