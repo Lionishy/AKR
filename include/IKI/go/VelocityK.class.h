@@ -21,12 +21,12 @@ namespace IKI { namespace go {
                 , CentralDifferenceDerivative([&R,&K,&w,this] (T phi) -> T { return (dr->at(VectorSp<T>(R.r,R.th,phi),K,w))[0]; }, R.phi, dR.phi)
             );
 
-            auto dr_dw = CentralDifferenceDerivative([&R,&K,&w,this] (T wr) -> T { return (dr->at(R,K,FVector<T>({wr,w[1]})))[0]; }, w[0], dw);
-
+            auto dD_dw = CentralDifferenceDerivative([&R,&K,&w,this] (T wr) -> T { return (dr->at(R,K,FVector<T>({wr,w[1]})))[0]; }, w[0], dw);
+           
             return VectorSp<T>(
-                  dr_dr.r/dr_dw
-                , dr_dr.th/dr_dw/R.r
-                , dr_dr.phi/dr_dw/R.r/sin(R.th)       
+                  dr_dr.r/dD_dw
+                , dr_dr.th/dD_dw/R.r
+                , dr_dr.phi/dD_dw/R.r/sin(R.th)       
             );        
         }
 
