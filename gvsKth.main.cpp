@@ -37,7 +37,7 @@ int main(int argc, char ** argv) {
     //r th phi
     VectorSp<double> R0(1.975,0.44928364,0.);
     //Vparal Vperp
-    VectorH<double> V0(0.2,0.12247449);
+    VectorH<double> V0(0.15,0.12247449);
     
     auto magnetic_field = std::make_shared<env::DipoleFieldModel<double>>();
     auto cavity = std::make_shared<env::InvariantLatitudeCavityModel<double>>(R0,0.005,0.23); 
@@ -56,7 +56,9 @@ int main(int argc, char ** argv) {
     auto AKR_dispersion_relation = std::make_shared<dsp::AKRDispersionRelation<double>>(environment);
 
     VectorSp<double> K0(0.,0.,0.9);
-    FVector<double> w0({0.976,0.0063});
+    //FVector<double> w0({0.976,0.0063}); //V0 = 0.2
+    //FVector<double> w0({0.991,0.006}); //V0 = 0.1
+    FVector<double> w0({0.985,0.0061}); //V0 = 0.15
     auto omega_corrector = std::make_shared<OmegaCorrector<double>>(AKR_dispersion_relation,1.e-9,1.e-7,1.e-7,1000);
     if (omega_corrector->correct(R0,K0,w0,R0,K0,w0)) {
         std::cout << "Error! Poor initial omega guess..." << std::endl;
@@ -102,9 +104,9 @@ int main(int argc, char ** argv) {
 
     std::cout << w0[0] << " " << w0[1] << std::endl;
 
-    auto default_velocity_R = std::make_shared<go::VelocityR<double>>(VectorSp<double>(1.e-4,1.e-4,1.e-4),1.e-5,AKR_dispersion_relation);
+    //auto default_velocity_R = std::make_shared<go::VelocityR<double>>(VectorSp<double>(1.e-4,1.e-4,1.e-4),1.e-5,AKR_dispersion_relation);
+    
     auto field_guided_velocity_R = std::make_shared<go::FieldGuidedVelocityR<double>>(VectorH<double>(1.e-5,1.e-5),1.e-5,AKR_dispersion_relation,magnetic_field);
-
     auto velocity_K = std::make_shared<go::VelocityK<double>>(VectorSp<double>(1.e-5,1.e-5,1.e-5),1.e-5,AKR_dispersion_relation);
     
     
@@ -115,22 +117,11 @@ int main(int argc, char ** argv) {
     std::ofstream gain_out("../data/gain.txt");
     gain_out << std::setprecision(8) << std::fixed;
     
-    Trajectory<double> trajectory_calculator(field_guided_velocity_R,velocity_K,corrector,1.e-4);
+    Trajectory<double> trajectory_calculator(field_guided_velocity_R,velocity_K,corrector,2.e-4);
     KStepper<double> kth_stepper(omega_corrector,0.0001);
 
     bool proceed = true;
     while (proceed) {
-        /*std::ostringstream filename_stream;
-        filename_stream << "../data/current/" << K0.th << ".trj.txt";
-
-        std::ofstream trajectory_out(filename_stream.str());
-        if (!trajectory_out) {
-            std::cout << "Can't open file " << filename_stream.str() << " to save results!" << std::endl;
-            return 0;
-        }
-        trajectory_out << std::setprecision(8) << std::fixed;
-        auto logger = std::make_shared<SimpleAsciiStepLogger1double>>(trajectory_out,0.,0.,0);
-        */
         auto logger = std::make_shared<go::EmptyStepLogger<double>>();
         
         double S = 0, dt = 0.1e-4, t = 0;
@@ -139,8 +130,9 @@ int main(int argc, char ** argv) {
         int res = trajectory_calculator.trajectory(R0,K0,w0,logger,dt,t,R,K,w,S);
 
         gain_out << K0.r << " " << K0.th << " " << K0.phi << " " << S << " " << (res?0:1) << std::endl;
+        std::cout << K0.th << std::endl;
         {
-            VectorSp<double> Kend(K0.r,K0.th-0.005,K0.phi);
+            VectorSp<double> Kend(K0.r,K0.th-0.01,K0.phi);
             int res = kth_stepper.find(R0,K0,Kend,w0,R0,K0,w0);
             if (w0[1] < 1.e-4 || res) {
                 std::cout << "------------------ END ---------------------" << std::endl;

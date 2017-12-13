@@ -21,9 +21,14 @@ namespace IKI { namespace go {
             K = (K-K_prev)*(dt/dt_prev) + K_prev;
             
             auto VR = vr->at(R,K,w);
+            //if (1.e-4 < norm(dt*VR))
+                //return 32;
             auto R_new = R + dt*VR;
 
+
             auto VK = vk->at(R_new,K,w);
+            //if (1.e-4 < norm(dt*VK))
+                //return 32;
             auto K_new = K + dt*VK;
 
             K_new = rotate(K_new,R_new,dt*VR);

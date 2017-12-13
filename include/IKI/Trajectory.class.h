@@ -7,6 +7,7 @@
 #include <IKI/go/StaggeredStep.class.h>
 
 #include <memory>
+#include <vector>
 
 namespace IKI {
     template <typename T>
@@ -14,12 +15,19 @@ namespace IKI {
         public:
             int trajectory(VectorSp<T> R, VectorSp<T> K, FVector<T> w, std::shared_ptr<go::AbstractStepLogger<T>> logger, T dt, T &t_out, VectorSp<T>  &R_out, VectorSp<T> &K_out, FVector<T> &w_out, T &S_out) {
                 auto staggered_step =
-                    go::StaggeredStep<double>(velocity_R, velocity_K, corrector, logger,dt,K);
+                    std::make_shared<go::StaggeredStep<double>>(velocity_R, velocity_K, corrector, logger,dt,K);
+
+                //std::vector<double> dt_array({2.e-4,1.e-4,5.e-5,2.e-5,1.e-5,5.e-6,1.e-6,5.e-7,1.e-7});
+                //std::array<double,9> dt_array = {2.e-4,1.e-4,5.e-5,2.e-5,1.e-5,5.e-6,1.e-6,5.e-7,1.e-7};
+                std::array<double,1> dt_array = {5.e-7};
+
+                auto step = 
+                    std::make_shared<SubsteppingDecorator<double,decltype(dt_array)>>(staggered_step,dt_array);
 
                 int res;
                 double t = 0, S = 0;
                 while ( w[1] > max_gamma) {
-                    if (0 < (res = staggered_step.step(R,K,w,R_out,K_out,w_out,dt)) ) {
+                    if (0 < (res = step->step(R,K,w,R_out,K_out,w_out,dt)) ) {
                         std::cout << t << " " << dt << " Error: " << res << std::endl;
                         break; 
                     }
